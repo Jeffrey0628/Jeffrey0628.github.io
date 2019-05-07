@@ -82,15 +82,15 @@
 <meta name="description" content="Generator，函数返回channelChannel是一等的值类型，像string或者integer。 这个例子中，我们在函数boring内部，定义并直接执行goroutine，用channel c 来接收产生的值，并在最后一步中返回这个值。在main函数中，输出channel c 的值。 123456789101112131415161718192021222324package maini">
 <meta name="keywords" content="编程,go">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Go并发编程Pattern3 Go并发编程模式">
+<meta property="og:title" content="Go并发编程Pattern 3 Go并发编程模式">
 <meta property="og:url" content="http://yoursite.com/2019/05/07/Go并发编程Pattern3/index.html">
 <meta property="og:site_name" content="Jeffrey">
 <meta property="og:description" content="Generator，函数返回channelChannel是一等的值类型，像string或者integer。 这个例子中，我们在函数boring内部，定义并直接执行goroutine，用channel c 来接收产生的值，并在最后一步中返回这个值。在main函数中，输出channel c 的值。 123456789101112131415161718192021222324package maini">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2019/05/07/Go并发编程Pattern3/Fanin.jpg">
-<meta property="og:updated_time" content="2019-05-07T15:36:14.184Z">
+<meta property="og:updated_time" content="2019-05-07T15:51:01.684Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Go并发编程Pattern3 Go并发编程模式">
+<meta name="twitter:title" content="Go并发编程Pattern 3 Go并发编程模式">
 <meta name="twitter:description" content="Generator，函数返回channelChannel是一等的值类型，像string或者integer。 这个例子中，我们在函数boring内部，定义并直接执行goroutine，用channel c 来接收产生的值，并在最后一步中返回这个值。在main函数中，输出channel c 的值。 123456789101112131415161718192021222324package maini">
 <meta name="twitter:image" content="http://yoursite.com/2019/05/07/Go并发编程Pattern3/Fanin.jpg">
 
@@ -128,7 +128,7 @@
 
 
 
-  <title>Go并发编程Pattern3 Go并发编程模式 | Jeffrey</title>
+  <title>Go并发编程Pattern 3 Go并发编程模式 | Jeffrey</title>
   
 
 
@@ -284,7 +284,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Go并发编程Pattern3 Go并发编程模式</h1>
+          <h1 class="post-title" itemprop="name headline">Go并发编程Pattern 3 Go并发编程模式</h1>
         
 
         <div class="post-meta">
@@ -314,7 +314,7 @@
 
           
           
-             <span id="/2019/05/07/Go并发编程Pattern3/" class="leancloud_visitors" data-flag-title="Go并发编程Pattern3 Go并发编程模式">
+             <span id="/2019/05/07/Go并发编程Pattern3/" class="leancloud_visitors" data-flag-title="Go并发编程Pattern 3 Go并发编程模式">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -353,6 +353,11 @@
 <p>但是上面的形式，Joe和Ann之间有个确定的顺序，也就是一种lockstep的。如果Ann更唠叨，应该会在Joe之前打印出boring执行的结果，但是我们的程序执行中，Ann一定在Joe之后说话。可以用一个Multiplexing结构解决这个问题。</p>
 <p>Fan-In结构如图，<img src="Fanin.jpg" alt="Fan-In"></p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">    <span class="string">"time"</span></span><br><span class="line">    <span class="string">"math/rand"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    c := fanIn(boring2(<span class="string">"Joe"</span>), boring2(<span class="string">"ann"</span>))</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">        fmt.Printf(<span class="string">"one say: %q\n"</span>, &lt;-c)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">boring2</span><span class="params">(msg <span class="keyword">string</span>)</span> &lt;-<span class="title">chan</span> <span class="title">string</span></span> &#123;</span><br><span class="line">    c := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>)</span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">for</span> i := <span class="number">0</span>; ; i++ &#123;</span><br><span class="line">            c &lt;- fmt.Sprintf(<span class="string">"%s %d"</span>, msg, i)</span><br><span class="line">            time.Sleep(time.Duration(rand.Intn(<span class="number">1e3</span>)) * time.Millisecond)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;()</span><br><span class="line">    <span class="keyword">return</span> c</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">fanIn</span><span class="params">(input1, input2 &lt;-<span class="keyword">chan</span> <span class="keyword">string</span>)</span> &lt;-<span class="title">chan</span> <span class="title">string</span></span> &#123;</span><br><span class="line">    c := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>)</span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;<span class="keyword">for</span> &#123;c &lt;- &lt;-input1&#125; &#125;()</span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;<span class="keyword">for</span> &#123;c &lt;- &lt;-input2&#125; &#125;()</span><br><span class="line">    <span class="keyword">return</span> c</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是我们可能确实需要上面的形式，需要一种序列化的执行，或者说lockstep。可以通过这种思路：</p>
+<p>在channel之上，定义另外一个channel，让goroutine等待其变化。接收全部的消息，然后再次使能它们通过一个私有channel。首先，我们定义一条用于回复的消息类型</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Message <span class="keyword">struct</span>&#123;</span><br><span class="line">  str <span class="keyword">string</span></span><br><span class="line">  wait <span class="keyword">chan</span> <span class="keyword">bool</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面直接给出完整代码。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">"time"</span></span><br><span class="line">    <span class="string">"math/rand"</span></span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Message <span class="keyword">struct</span> &#123;</span><br><span class="line">    str  <span class="keyword">string</span></span><br><span class="line">    wait <span class="keyword">chan</span> <span class="keyword">bool</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    c := boring(<span class="string">"Joe"</span>) <span class="comment">// Function returning a channel.</span></span><br><span class="line">    d := boring(<span class="string">"Ann"</span>)</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">5</span>; i++ &#123;</span><br><span class="line">        msg1 := &lt;-c</span><br><span class="line">        fmt.Println(msg1.str)</span><br><span class="line">        msg2 := &lt;-d</span><br><span class="line">        fmt.Println(msg2.str)</span><br><span class="line">        msg1.wait &lt;- <span class="literal">true</span></span><br><span class="line">        msg2.wait &lt;- <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(<span class="string">"You're boring; I'm leaving."</span>)</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">boring</span><span class="params">(msg <span class="keyword">string</span>)</span> &lt;-<span class="title">chan</span> <span class="title">Message</span></span> &#123; <span class="comment">// Returns receive-only channel of strings.</span></span><br><span class="line"></span><br><span class="line">    waitForIt := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">bool</span>)</span><br><span class="line"></span><br><span class="line">    c := <span class="built_in">make</span>(<span class="keyword">chan</span> Message)</span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123; <span class="comment">// We launch the goroutine from inside the function.</span></span><br><span class="line">        <span class="keyword">for</span> i := <span class="number">0</span>; ; i++ &#123;</span><br><span class="line">            c &lt;- Message&#123;fmt.Sprintf(<span class="string">"%s: %d"</span>, msg, i), waitForIt&#125;</span><br><span class="line">            time.Sleep(time.Duration(rand.Intn(<span class="number">2e3</span>)) * time.Millisecond)</span><br><span class="line">            &lt;-waitForIt</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;()</span><br><span class="line">    <span class="keyword">return</span> c <span class="comment">// Return the channel to the caller.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="关于select"><a href="#关于select" class="headerlink" title="关于select"></a>关于select</h2><p>select提供了另外一种处理多个channel的方法。像是其他语言中的switch语句，但是每一个case对应的是一种通信。</p>
 <ul>
 <li>所有的channel都被评估(evaluate)</li>
@@ -402,8 +407,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/05/07/Go并发编程Pattern2/" rel="next" title="Go并发编程Pattern2">
-                <i class="fa fa-chevron-left"></i> Go并发编程Pattern2
+              <a href="/2019/05/07/Go并发编程Pattern2/" rel="next" title="Go并发编程Pattern 2">
+                <i class="fa fa-chevron-left"></i> Go并发编程Pattern 2
               </a>
             
           </div>

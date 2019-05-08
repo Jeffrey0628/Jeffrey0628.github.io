@@ -88,7 +88,7 @@
 <meta property="og:description" content="Generator，函数返回channelChannel是一等的值类型，像string或者integer。 这个例子中，我们在函数boring内部，定义并直接执行goroutine，用channel c 来接收产生的值，并在最后一步中返回这个值。在main函数中，输出channel c 的值。 123456789101112131415161718192021222324package maini">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2019/05/07/Go并发编程Pattern3/Fanin.jpg">
-<meta property="og:updated_time" content="2019-05-08T03:14:40.820Z">
+<meta property="og:updated_time" content="2019-05-08T04:21:44.816Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Go并发编程Pattern 3 Go并发编程模式">
 <meta name="twitter:description" content="Generator，函数返回channelChannel是一等的值类型，像string或者integer。 这个例子中，我们在函数boring内部，定义并直接执行goroutine，用channel c 来接收产生的值，并在最后一步中返回这个值。在main函数中，输出channel c 的值。 123456789101112131415161718192021222324package maini">
@@ -383,7 +383,7 @@
 <p>Joe一直在进行boring的对话，我们在打印rand次之后，结束这段对话，向quit发送!Bye!”，select接收到quit之后，向quit发送”See you!”，与我们道别。当然，在真正的道别之前，可能需要做一些清理工作cleanup()。这就简洁且干净地完成了一次round-trip的对话。</p>
 <h2 id="Daisy-chain"><a href="#Daisy-chain" class="headerlink" title="Daisy-chain"></a>Daisy-chain</h2><p>说到round-trip，我们可以把这个例子扩展，我们做一个复杂的daisy-chain，或者称之为传声筒的小例子。就是将非常多个channel连接，传递一条消息。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">f</span><span class="params">(left, right <span class="keyword">chan</span> <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">      left &lt;- <span class="number">1</span> + &lt;-right</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">      <span class="keyword">const</span> n = <span class="number">100000</span></span><br><span class="line">      leftmost := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">      right := leftmost</span><br><span class="line">      left := leftmost</span><br><span class="line">      <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; n; i++ &#123;</span><br><span class="line">            right = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">            <span class="keyword">go</span> f(left, right)</span><br><span class="line">            left = right</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(c <span class="keyword">chan</span> <span class="keyword">int</span>)</span></span> &#123; c &lt;- <span class="number">1</span> &#125;(right)</span><br><span class="line">      fmt.Println(&lt;-leftmost)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在上例中，开了十万个goroutine，但是执行速度也很快，应该在1s以内，也反应了goroutine的轻量级。(我将const n 的大小改为一百万，在我的i5 CPU上跑，花了数秒时间，这与之前对于goroutine的数量的说明确实是对的，goroutine数量大概在十万数量级可以保证良好性能，具体的原因还需要查响应文档。)</p>
+<p>在上例中，开了十万个goroutine，但是执行速度也很快，应该在1s以内，也反应了goroutine的轻量级。(我将const n 的大小改为一百万，在我的i5 CPU上跑，花了数秒时间，这与之前对于goroutine的数量的说明确实是对的，goroutine数量大概在十万数量级可以保证良好性能，具体的原因还需要查相关文档。)</p>
 
       
     </div>
@@ -426,8 +426,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/05/08/Go并发编程Pattern4/" rel="prev" title="Go并发编程Pattern 4">
-                Go并发编程Pattern 4 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/05/08/Go并发编程Pattern4/" rel="prev" title="Go并发编程Pattern 4 简单的Google搜索">
+                Go并发编程Pattern 4 简单的Google搜索 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
